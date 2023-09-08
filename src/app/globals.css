@@ -7,3 +7,23 @@
   margin: 0px;
   padding: 0px;
 }
+
+:root {
+  --primary: #3fcf8e;
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.color-primary {
+  color: var(--primary);
+}
+
+.shadow-bottom {
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.spinner-primary-color .border-b-primary {
+  border-bottom-color: var(--primary);
+}
