@@ -1,12 +1,10 @@
 "use client";
-import { QueryClient, QueryClientProvider } from "react-query";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { NextUIProvider } from "@nextui-org/react";
+import { ConfigProvider } from "antd";
 
 const inter = Inter({ subsets: ["latin"] });
-
-const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
@@ -19,9 +17,16 @@ export default function RootLayout({
         <title>Vérifier le vocabulaire</title>
       </head>
       <body className={inter.className}>
-        <QueryClientProvider client={queryClient}>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: "#3fcf8e",
+              borderRadius: 2,
+            },
+          }}
+        >
           <NextUIProvider>{children}</NextUIProvider>
-        </QueryClientProvider>
+        </ConfigProvider>
       </body>
     </html>
   );

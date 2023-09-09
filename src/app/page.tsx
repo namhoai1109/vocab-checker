@@ -30,7 +30,7 @@ export default function Home() {
             Vérifier le vocabulaire
           </span>
           <a
-            href="https://supabase.com/dashboard/project/khggyxjpginhvguwdtbt/editor/28621"
+            href="https://supabase.com/dashboard/project/khggyxjpginhvguwdtbt/editor"
             target="_blank"
           >
             <Button size="md" className="bg-primary text-white">
@@ -41,9 +41,19 @@ export default function Home() {
       </nav>
       <main className="w-screen flex justify-center pt-16">
         <article className="w-[800px]">
-          <DocReader />
+          <div className="h-50 mb-8 mt-4">
+            <label className="text-base font-medium mb-1 inline-block">
+              Entrer le fichier
+            </label>
+            <DocReader
+              onChange={(text: string) => {
+                setParagraph(text);
+                result.splice(0, result.length);
+              }}
+            />
+          </div>
           <Textarea
-            label={<span className="text-base">Entrer le paragraphe</span>}
+            label={<label className="text-base">Entrer le paragraphe</label>}
             labelPlacement="outside"
             placeholder="abc..."
             minRows={8}
@@ -51,9 +61,10 @@ export default function Home() {
             value={paragraph}
             onChange={(event) => {
               setParagraph(event.target.value);
+              result.splice(0, result.length);
             }}
           />
-          <div className="flex justify-between items-center mt-2">
+          <div className="flex justify-between items-center mt-8">
             <RadioGroup
               label="Choisir le niveau"
               orientation="horizontal"
