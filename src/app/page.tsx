@@ -9,7 +9,7 @@ import {
 } from "@nextui-org/react";
 import { levelList } from "./constants";
 import usePage from "./usePage";
-import { Fragment } from "react";
+import { Fragment, use, useEffect, useState } from "react";
 import DocReader from "./components/DocReader";
 
 export default function Home() {
@@ -22,6 +22,21 @@ export default function Home() {
     setParagraph,
     handleVerify,
   } = usePage();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="w-screen h-screen flex justify-center items-center">
+        <Spinner className="spinner-primary-color mr-2" />
+        <p>Loading</p>
+      </main>
+    );
+  }
+
   return (
     <main className="overflow-x-hidden">
       <nav className="w-screen flex justify-center shadow-bottom fixed z-10 bg-white">
@@ -36,7 +51,7 @@ export default function Home() {
           </a>
         </div>
       </nav>
-      <main className="w-screen flex justify-center pt-16">
+      <main className="w-screen h-screen flex justify-center pt-16">
         <article className="w-[800px]">
           <div className="h-50 mb-8 mt-4">
             <label className="text-base font-medium mb-1 inline-block">
@@ -95,7 +110,7 @@ export default function Home() {
             result.length > 0 && (
               <Fragment>
                 <Divider className="mt-4" />
-                <div className="w-full flex flex-wrap mt-4">
+                <div className="w-full flex flex-wrap mt-4 pb-5">
                   {result.map((item, index) => {
                     return (
                       <span
