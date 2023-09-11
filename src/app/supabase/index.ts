@@ -53,7 +53,6 @@ export const getExistedVocab = async (words: string[], levels: string[]) => {
 
   for (let index = 0; index < levels.length; index++) {
     const existedWords = await checkVocab(words, levels[index]);
-    console.log(levels[index], existedWords);
     result.push(...mapToStringArray(existedWords));
   }
 

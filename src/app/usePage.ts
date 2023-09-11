@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { getExistedVocab } from "./supabase";
 import { levelConstant, levelList } from "./constants";
 
-const punctuationRegex = /[!"#$%&()*+-.,/:;<=>?@[\]^_`{|}~]/g;
-
 const mapToResultArray = (words: string[], exitedWord: string[]) => {
   return words.map((word) => {
     return {
@@ -41,16 +39,35 @@ const usePage = () => {
   const handleVerify = () => {
     setClicking(clicking + 1);
     if (paragraph !== "") {
-      const words = paragraph.replace(punctuationRegex, "").split(" ");
-      words.forEach((word, index) => {
+      const words = paragraph
+        .replaceAll(".", ". ")
+        .replaceAll(",", ", ")
+        .split(" ");
+
+      const result: string[] = [];
+      for (let index = 0; index < words.length; index++) {
+        let word = words[index];
+
         if (word.includes("’") || word.includes("'")) {
           //split that word to 2 words and add to array
           const splitWord = word.split(/’|'/);
           splitWord[0] = splitWord[0] + "'";
-          words.splice(index, 1, ...splitWord);
+          result.push(splitWord[0]);
+          word = splitWord[1];
         }
-      });
-      setWords(words);
+
+        if (word.includes(".") || word.includes(",")) {
+          //split that word to a word, a punctuation and add to array
+          const splitWord = word.substring(0, word.length - 1);
+          result.push(splitWord, word[word.length - 1]);
+          continue;
+        }
+
+        if (word !== "") {
+          result.push(word);
+        }
+      }
+      setWords(result);
     }
   };
 

@@ -23,16 +23,13 @@ export default function Home() {
     handleVerify,
   } = usePage();
   return (
-    <main>
+    <main className="overflow-x-hidden">
       <nav className="w-screen flex justify-center shadow-bottom fixed z-10 bg-white">
         <div className="w-[1000px] flex p-2 justify-between items-center">
           <span className="color-primary font-bold text-xl">
             Vérifier le vocabulaire
           </span>
-          <a
-            href="https://supabase.com/dashboard/project/khggyxjpginhvguwdtbt/editor"
-            target="_blank"
-          >
+          <a href={process.env.NEXT_PUBLIC_INPUT_LINK} target="_blank">
             <Button size="md" className="bg-primary text-white">
               Entrer le mot
             </Button>
