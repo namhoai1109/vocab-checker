@@ -26,3 +26,5 @@ export const levelList = [
   levelConstant.C1,
   levelConstant.C2,
 ];
+
+export const MAX_WORDS_ARRAY_LENGTH = 800;

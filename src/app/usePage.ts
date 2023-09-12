@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getExistedVocab } from "./supabase";
-import { levelConstant, levelList } from "./constants";
+import { MAX_WORDS_ARRAY_LENGTH, levelConstant, levelList } from "./constants";
 
 const mapToResultArray = (words: string[], exitedWord: string[]) => {
   return words.map((word) => {
@@ -28,10 +28,45 @@ const usePage = () => {
       );
 
       if (subLevelList.length > 0) {
-        getExistedVocab(words, subLevelList).then((existedWord) => {
-          setResult(mapToResultArray(words, existedWord));
-          setIsLoading(false);
-        });
+        if (words.length <= MAX_WORDS_ARRAY_LENGTH) {
+          getExistedVocab(words, subLevelList).then((existedWord) => {
+            setResult(mapToResultArray(words, existedWord));
+            setIsLoading(false);
+          });
+        } else {
+          //split words array to sub arrays and get existed vocab
+          const subWordsArray: string[][] = [];
+          for (
+            let index = 0;
+            index < words.length;
+            index += MAX_WORDS_ARRAY_LENGTH
+          ) {
+            subWordsArray.push(
+              words.slice(index, index + MAX_WORDS_ARRAY_LENGTH)
+            );
+          }
+
+          const asyncFuncArray: Promise<TWordChecked[]>[] = [];
+
+          for (let index = 0; index < subWordsArray.length; index++) {
+            const subWords = subWordsArray[index];
+            asyncFuncArray.push(
+              Promise.resolve(
+                getExistedVocab(subWords, subLevelList).then((existedWord) => {
+                  return mapToResultArray(subWords, existedWord);
+                })
+              )
+            );
+          }
+          Promise.all(asyncFuncArray).then((result) => {
+            const finalResult: TWordChecked[] = [];
+            result.forEach((subResult) => {
+              finalResult.push(...subResult);
+            });
+            setResult(finalResult);
+            setIsLoading(false);
+          });
+        }
       }
     }
   }, [words, clicking, level]);
