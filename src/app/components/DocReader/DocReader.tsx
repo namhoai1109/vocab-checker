@@ -98,9 +98,10 @@ function DocReader({ onChange }: IDocReader) {
       <p className="ant-upload-drag-icon">
         <InboxOutlined className="color-primary" />
       </p>
-      <p className="">
+      <p className="max-sm:hidden">
         Cliquez ou faites glisser le fichier vers cette zone pour le télécharger
       </p>
+      <p className="sm:hidden text-xs">Cliquez pour le télécharger</p>
     </Dragger>
   );
 }
