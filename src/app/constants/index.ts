@@ -28,3 +28,4 @@ export const levelList = [
 ];
 
 export const MAX_WORDS_ARRAY_LENGTH = 800;
+export const ENTER_CODE = "e2a7106f1cc8bb1e1318df70aa0a3540";

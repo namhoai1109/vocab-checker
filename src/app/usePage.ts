@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { getExistedVocab } from "./supabase";
-import { MAX_WORDS_ARRAY_LENGTH, levelConstant, levelList } from "./constants";
+import {
+  ENTER_CODE,
+  MAX_WORDS_ARRAY_LENGTH,
+  levelConstant,
+  levelList,
+} from "./constants";
 
 const mapToResultArray = (words: string[], exitedWord: string[]) => {
   return words.map((word) => {
@@ -83,6 +88,19 @@ const usePage = () => {
       for (let index = 0; index < words.length; index++) {
         let word = words[index];
 
+        if (word.includes("\n")) {
+          //split that word to 2 words and add to array
+          let splitWord = word.split("\n");
+          if (splitWord[0] !== "") {
+            splitWord = [splitWord[0], ENTER_CODE, splitWord[1]];
+          } else {
+            splitWord = [ENTER_CODE, splitWord[1]];
+          }
+          word = splitWord.pop() as string;
+          result.push(...splitWord);
+          console.log(word);
+        }
+
         if (word.includes("’") || word.includes("'")) {
           //split that word to 2 words and add to array
           const splitWord = word.split(/’|'/);
@@ -103,6 +121,8 @@ const usePage = () => {
         }
       }
       setWords(result);
+    } else {
+      setWords([]);
     }
   };
 

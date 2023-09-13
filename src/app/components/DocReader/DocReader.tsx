@@ -50,7 +50,6 @@ function DocReader({ onChange }: IDocReader) {
 
   const onFileUpload = (file: File) => {
     const reader = new FileReader();
-
     reader.onload = (e: ProgressEvent<FileReader>) => {
       const content = e.target?.result;
       const paragraphs = getParagraphs(content as string);
@@ -77,6 +76,12 @@ function DocReader({ onChange }: IDocReader) {
         if (info.fileList.length > 1) {
           info.fileList.splice(0, 1);
         }
+
+        if (info.fileList.length === 0) {
+          onChange("");
+          return;
+        }
+
         setFiles(info.fileList);
         const { status } = info.file;
         if (status === "done") {
@@ -85,6 +90,9 @@ function DocReader({ onChange }: IDocReader) {
           message.error(`${info.file.name} fichier téléchargé avec erreur.`);
         }
         if (info.file.originFileObj) onFileUpload(info.file.originFileObj);
+      }}
+      onRemove={() => {
+        setFiles([]);
       }}
     >
       <p className="ant-upload-drag-icon">

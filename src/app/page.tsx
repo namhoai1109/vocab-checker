@@ -7,7 +7,7 @@ import {
   Spinner,
   Textarea,
 } from "@nextui-org/react";
-import { levelList } from "./constants";
+import { ENTER_CODE, levelList } from "./constants";
 import usePage from "./usePage";
 import { Fragment, use, useEffect, useState } from "react";
 import DocReader from "./components/DocReader";
@@ -112,14 +112,18 @@ export default function Home() {
                 <Divider className="mt-4" />
                 <div className="w-full flex flex-wrap mt-4 pb-5">
                   {result.map((item, index) => {
+                    if (item.word === ENTER_CODE)
+                      return <span key={index} className="basis-full h-0" />;
                     return (
-                      <span
-                        className={`${
-                          item.isExisted ? "text-red-500" : ""
-                        } text-sm`}
-                        key={index}
-                      >
-                        {item.word}&nbsp;
+                      <span key={index}>
+                        <span
+                          className={`${
+                            item.isExisted ? "text-white bg-primary" : ""
+                          } text-sm`}
+                        >
+                          {item.word}
+                        </span>
+                        &nbsp;
                       </span>
                     );
                   })}
