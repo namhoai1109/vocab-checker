@@ -42,7 +42,7 @@ export default function Home() {
       <nav className="w-screen flex justify-center shadow-bottom fixed z-10 bg-white">
         <div className="w-[1000px] flex p-2 justify-between items-center">
           <span className="color-primary font-bold text-xl max-sm:text-base">
-            Vérifier le vocabulaire
+            Thái Phong
           </span>
           <a href={process.env.NEXT_PUBLIC_INPUT_LINK} target="_blank">
             <Button size="md" className="bg-primary text-white max-sm:hidden">
@@ -55,7 +55,7 @@ export default function Home() {
         </div>
       </nav>
       <main className="w-screen h-screen flex justify-center pt-16 max-sm:pt-12">
-        <article className="w-[800px] max-lg:px-6">
+        <article className="w-[800px] max-lg:px-4">
           <div className="h-50 mb-8 mt-4">
             <label className="text-base max-sm:text-sm font-medium mb-1 inline-block">
               Entrer le fichier
@@ -94,6 +94,7 @@ export default function Home() {
               onChange={(event) => {
                 setLevel(event.target.value);
               }}
+              className="pl-1"
             >
               {levelList.map((level) => {
                 return (
@@ -101,7 +102,7 @@ export default function Home() {
                     <Radio value={level} className="mr-1 max-sm:hidden">
                       {level}
                     </Radio>
-                    <Radio size="sm" value={level} className="mr-1 sm:hidden">
+                    <Radio size="sm" value={level} className="sm:hidden">
                       {level}
                     </Radio>
                   </div>

@@ -6,6 +6,7 @@ import {
   levelConstant,
   levelList,
 } from "./constants";
+import { message } from "antd";
 
 const mapToResultArray = (words: string[], exitedWord: string[]) => {
   return words.map((word) => {
@@ -34,10 +35,14 @@ const usePage = () => {
 
       if (subLevelList.length > 0) {
         if (words.length <= MAX_WORDS_ARRAY_LENGTH) {
-          getExistedVocab(words, subLevelList).then((existedWord) => {
-            setResult(mapToResultArray(words, existedWord));
-            setIsLoading(false);
-          });
+          getExistedVocab(words, subLevelList)
+            .then((existedWord) => {
+              setResult(mapToResultArray(words, existedWord));
+              setIsLoading(false);
+            })
+            .catch((error) => {
+              message.error(error.message);
+            });
         } else {
           //split words array to sub arrays and get existed vocab
           const subWordsArray: string[][] = [];
@@ -63,14 +68,18 @@ const usePage = () => {
               )
             );
           }
-          Promise.all(asyncFuncArray).then((result) => {
-            const finalResult: TWordChecked[] = [];
-            result.forEach((subResult) => {
-              finalResult.push(...subResult);
+          Promise.all(asyncFuncArray)
+            .then((result) => {
+              const finalResult: TWordChecked[] = [];
+              result.forEach((subResult) => {
+                finalResult.push(...subResult);
+              });
+              setResult(finalResult);
+              setIsLoading(false);
+            })
+            .catch((error) => {
+              message.error(error.message);
             });
-            setResult(finalResult);
-            setIsLoading(false);
-          });
         }
       }
     }
