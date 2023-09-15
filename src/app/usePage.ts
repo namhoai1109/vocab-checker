@@ -26,63 +26,62 @@ const usePage = () => {
   const [level, setLevel] = useState<string>(levelConstant.A1);
 
   useEffect(() => {
-    if (words.length !== 0) {
-      setIsLoading(true);
-      const subLevelList = levelList.slice(
-        levelList.indexOf(level) + 1,
-        levelList.length
-      );
+    const exec = async () => {
+      try {
+        if (words.length !== 0) {
+          setIsLoading(true);
+          const subLevelList = levelList.slice(
+            levelList.indexOf(level) + 1,
+            levelList.length
+          );
 
-      if (subLevelList.length > 0) {
-        if (words.length <= MAX_WORDS_ARRAY_LENGTH) {
-          getExistedVocab(words, subLevelList)
-            .then((existedWord) => {
+          if (subLevelList.length > 0) {
+            if (words.length <= MAX_WORDS_ARRAY_LENGTH) {
+              const existedWord = await getExistedVocab(words, subLevelList);
               setResult(mapToResultArray(words, existedWord));
               setIsLoading(false);
-            })
-            .catch((error) => {
-              message.error(error.message);
-            });
-        } else {
-          //split words array to sub arrays and get existed vocab
-          const subWordsArray: string[][] = [];
-          for (
-            let index = 0;
-            index < words.length;
-            index += MAX_WORDS_ARRAY_LENGTH
-          ) {
-            subWordsArray.push(
-              words.slice(index, index + MAX_WORDS_ARRAY_LENGTH)
-            );
-          }
+            } else {
+              //split words array to sub arrays and get existed vocab
+              const subWordsArray: string[][] = [];
+              for (
+                let index = 0;
+                index < words.length;
+                index += MAX_WORDS_ARRAY_LENGTH
+              ) {
+                subWordsArray.push(
+                  words.slice(index, index + MAX_WORDS_ARRAY_LENGTH)
+                );
+              }
 
-          const asyncFuncArray: Promise<TWordChecked[]>[] = [];
+              const asyncFuncArray: Promise<TWordChecked[]>[] = [];
 
-          for (let index = 0; index < subWordsArray.length; index++) {
-            const subWords = subWordsArray[index];
-            asyncFuncArray.push(
-              Promise.resolve(
-                getExistedVocab(subWords, subLevelList).then((existedWord) => {
-                  return mapToResultArray(subWords, existedWord);
-                })
-              )
-            );
-          }
-          Promise.all(asyncFuncArray)
-            .then((result) => {
+              for (let index = 0; index < subWordsArray.length; index++) {
+                const subWords = subWordsArray[index];
+                asyncFuncArray.push(
+                  Promise.resolve(
+                    getExistedVocab(subWords, subLevelList).then(
+                      (existedWord) => {
+                        return mapToResultArray(subWords, existedWord);
+                      }
+                    )
+                  )
+                );
+              }
+              const result = await Promise.all(asyncFuncArray);
               const finalResult: TWordChecked[] = [];
               result.forEach((subResult) => {
                 finalResult.push(...subResult);
               });
               setResult(finalResult);
               setIsLoading(false);
-            })
-            .catch((error) => {
-              message.error(error.message);
-            });
+            }
+          }
         }
+      } catch (error: any) {
+        message.error("erreur système: ", error);
       }
-    }
+    };
+    exec();
   }, [words, clicking, level]);
 
   const handleVerify = () => {
