@@ -37,7 +37,7 @@ export const checkVocab = async (words: string[], level: string) => {
     );
 
   if (error) {
-    message.error(error.message);
+    message.error("call supabase API error: " + error.message);
     return [];
   }
 
